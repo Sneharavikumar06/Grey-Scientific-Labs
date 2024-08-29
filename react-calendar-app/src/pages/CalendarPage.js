@@ -26,6 +26,7 @@ const AddEventButton = styled.button`
   border: none;
   border-radius: 8px;
   margin-bottom: 25px;
+  margin-left: 500px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -50,6 +51,7 @@ const FilterSelect = styled.select`
   border: none;
   border-radius: 8px;
   margin-bottom: 25px;
+  margin-left: 100px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -69,24 +71,30 @@ const FilterSelect = styled.select`
 
 const CalendarPage = () => {
   const [isAdding, setIsAdding] = useState(false);
-  const [filter, setFilter] = useState('');
-  const { addNewEvent, fetchEvents, events } = useEvents(); // Ensure fetchEvents is available
-
-  const fetchEventsCallback = useCallback(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+  const [filter, setFilter, setEvents] = useState('');
+  const { addNewEvent, fetchEvents, events } = useEvents(); 
 
   useEffect(() => {
-    fetchEventsCallback();
-  }, [fetchEventsCallback]);
+    const loadEvents = async () => {
+      try {
+        const events = await fetchEvents();
+        setEvents(events);
+      } catch (error) {
+        console.error('Failed to load events:', error);
+      }
+    };
+  
+    loadEvents();
+  }, []);
 
+  
   const handleAddClick = () => {
     setIsAdding(true);
   };
 
   const handleCloseForm = () => {
     setIsAdding(false);
-    fetchEvents(); // Fetch events again to refresh
+    fetchEvents(); 
   };
 
   const handleFilterChange = (e) => {
@@ -104,6 +112,9 @@ const CalendarPage = () => {
       </FilterSelect>
       {isAdding && <EventForm onClose={handleCloseForm} addNewEvent={addNewEvent} />}
       <Calendar events={events} filter={filter} />
+      {events.map(event => (
+        <div key={event.id}>{event.title}</div>
+      ))}
     </PageContainer>
   );
 };

@@ -36,12 +36,26 @@ const EditButton = styled.button`
 `;
 
 const DeleteButton = styled.button`
-  padding: 10px;
-  background-color: #f44336;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f0932b, #f39c12);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  margin-left: 20px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background 0.3s, transform 0.3s;
+
+  &:hover {
+    background: linear-gradient(135deg, #ffbe76, #f39c12);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 `;
 
 const EventDetailsPage = () => {
@@ -52,7 +66,7 @@ const EventDetailsPage = () => {
   const { events, deleteEvent } = useEvents();
 
   useEffect(() => {
-    const foundEvent = events.find(event => event.id === id);
+    const foundEvent = events.find(event => event.id.toString() === id);
     if (foundEvent) {
       setEvent(foundEvent);
     } else {
@@ -69,8 +83,12 @@ const EventDetailsPage = () => {
   };
 
   const handleDeleteClick = async () => {
-    await deleteEvent(id);
-    navigate('/');
+    try {
+      await deleteEvent(id);
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to delete event:', error);
+    }
   };
 
   return (
@@ -100,4 +118,3 @@ const EventDetailsPage = () => {
 };
 
 export default EventDetailsPage;
-

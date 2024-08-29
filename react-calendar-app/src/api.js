@@ -18,6 +18,7 @@ export const fetchEvents = async (retryCount = 0) => {
   }
 };
 
+// Ensure other functions are also exported if needed
 export const addEvent = async (event) => {
   const response = await axios.post(`${API_URL}/events`, event);
   return response.data;

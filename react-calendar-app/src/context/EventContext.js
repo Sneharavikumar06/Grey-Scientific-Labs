@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { fetchEvents as fetchEventsApi, addEvent, editEvent, deleteEvent } from '../api'; // Ensure this import is correct
+import { fetchEvents as fetchEventsApi, addEvent, editEvent, deleteEvent } from '../api'; 
 
 const EventContext = createContext();
 
@@ -7,18 +7,19 @@ export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchEvents = async () => {
+    try {
+      const events = await fetchEventsApi();
+      setEvents(events);
+    } catch (error) {
+      console.error("Failed to fetch events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const events = await fetchEventsApi(); // Use the correct function name
-        setEvents(events);
-      } catch (error) {
-        console.error("Failed to fetch events:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadEvents();
+    fetchEvents();
   }, []);
 
   const addNewEvent = async (event) => {

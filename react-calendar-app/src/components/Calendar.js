@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-// Styled components
 const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -35,12 +34,12 @@ const HeaderButton = styled.button`
   }
 `;
 
-const MonthYear = styled.h2`
+const MonthYear = styled.div`
   font-size: 24px;
   color: #333;
 `;
 
-const MonthYearText = styled.h2`
+const MonthYearText = styled.div`
   font-size: 40px;
   color: #333;
 `;
@@ -139,7 +138,7 @@ const Calendar = ({ events }) => {
         <HeaderButton onClick={() => handleMonthChange(-1)}>Previous</HeaderButton>
         <MonthYear>
           <MonthYearText>
-            {currentDate.toLocaleDateString('en-US', { month: 'long' })}
+            <div>{currentDate.toLocaleDateString('en-US', { month: 'long' })}</div>
           </MonthYearText>
           <YearSelect value={currentDate.getFullYear()} onChange={handleYearChange}>
             {years.map(year => (
